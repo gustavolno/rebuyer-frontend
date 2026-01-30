@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
-import QRCode from "react-qr-code"; // <--- A biblioteca que instalamos
+import QRCode from "react-qr-code";
 import { Calendar, MapPin, Ticket, Loader2 } from 'lucide-react';
 
 const MeusIngressosPage = () => {
@@ -8,8 +8,8 @@ const MeusIngressosPage = () => {
   const [ingressos, setIngressos] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Lembre-se de trocar para https://rebuyer-backend.onrender.com antes de subir pro Render
-  const API_URL = "http://localhost:8000"; 
+ 
+  const API_URL = "https://rebuyer-backend.onrender.com"; 
 
   useEffect(() => {
     if (user) {

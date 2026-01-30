@@ -17,45 +17,35 @@ function App() {
         <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors">
           {/* Navbar aparece em todas, mas ela se adapta se não tiver logado */}
           <Navbar />
+          
+        <Routes>
+            {/* --- ROTAS PÚBLICAS (Qualquer um acessa) --- */}
+            <Route path="/" element={<LoginPage />} />
+            <Route path="/cadastro" element={<CadastroPage />} />
+            
+            {/* AGORA A VITRINE É PÚBLICA (Não pede login) */}
+            <Route path="/vitrine" element={<HomePage />} />
 
-          <Route 
-            path="/meus-ingressos" element={
+
+            {/* --- ROTAS PROTEGIDAS (Só logado) --- */}
+            <Route path="/meus-ingressos" element={
                 <RotaProtegida>
                     <MeusIngressosPage />
                 </RotaProtegida>
             } />
-          
-          <Routes>
-            {/* Rotas Públicas */}
-            <Route path="/" element={<LoginPage />} />
-            <Route path="/cadastro" element={<CadastroPage />} />
 
-            {/* Rotas Privadas (Só entra com Login) */}
-            <Route 
-              path="/vitrine" 
-              element={
-                <RotaProtegida>
-                  <HomePage />
-                </RotaProtegida>
-              } 
-            />
-
-            <Route 
-              path="/admin-eventos" element={
+            <Route path="/admin-eventos" element={
                 <RotaProtegida>
                     <AdminEventosPage />
                 </RotaProtegida>
             } />
             
-            <Route 
-              path="/vender" 
-              element={
+            <Route path="/vender" element={
                 <RotaProtegida>
-                  <VenderPage />
+                    <VenderPage />
                 </RotaProtegida>
-              } 
-            />
-          </Routes>
+            } />
+      </Routes>
         </div>
       </Router>
     </AuthProvider>
