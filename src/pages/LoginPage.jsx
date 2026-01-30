@@ -1,53 +1,86 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { useNavigate } from 'react-router-dom';
-import { UserCircle2, ArrowRight } from 'lucide-react';
+import { useNavigate, Link } from 'react-router-dom';
+import { Ticket, Lock, Mail, Loader2 } from 'lucide-react';
 
 const LoginPage = () => {
-  const [usuarios, setUsuarios] = useState([]);
   const { login } = useAuth();
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
   const API_URL = "https://rebuyer-backend.onrender.com";
 
-  useEffect(() => {
-    fetch(`${API_URL}/usuarios/`)
-      .then(res => res.json())
-      .then(data => setUsuarios(data))
-      .catch(err => console.error(err));
-  }, []);
+  const [form, setForm] = useState({ email: '', senha: '' });
 
-  const handleLogin = (usuario) => {
-    login(usuario);
-    navigate('/'); // Manda para a Home
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      // Chama a nova rota de login
+      const response = await fetch(`${API_URL}/login/`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form)
+      });
+
+      if (response.ok) {
+        const usuario = await response.json();
+        login(usuario); // Salva no contexto
+        navigate('/vitrine'); 
+      } else {
+        const error = await response.json();
+        alert(error.detail || "Email ou senha incorretos");
+      }
+    } catch (error) {
+      alert("Erro ao conectar com o servidor");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 transition-colors p-4">
-      <div className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-xl max-w-md w-full border border-gray-100 dark:border-gray-700">
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">Bem-vindo de volta</h1>
-          <p className="text-gray-500 dark:text-gray-400">Escolha um perfil para entrar</p>
-        </div>
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 dark:bg-gray-900 p-4">
+      <div className="mb-8 text-center">
+        <Ticket className="h-16 w-16 text-primary mx-auto mb-2" />
+        <h1 className="text-4xl font-extrabold text-gray-900 dark:text-white">Rebuyer</h1>
+        <p className="text-gray-500 dark:text-gray-400">O marketplace seguro de ingressos</p>
+      </div>
 
-        <div className="space-y-3">
-          {usuarios.map(u => (
-            <button
-              key={u.id}
-              onClick={() => handleLogin(u)}
-              className="w-full flex items-center justify-between p-4 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-primary hover:bg-indigo-50 dark:hover:bg-gray-700 dark:hover:border-primary transition-all group bg-white dark:bg-gray-800"
-            >
-              <div className="flex items-center gap-3">
-                <div className="bg-primary/10 p-2 rounded-full text-primary">
-                  <UserCircle2 className="h-6 w-6" />
-                </div>
-                <div className="text-left">
-                  <p className="font-bold text-gray-900 dark:text-white group-hover:text-primary transition-colors">{u.nome}</p>
-                  <p className="text-xs text-gray-500 dark:text-gray-400">{u.email}</p>
-                </div>
-              </div>
-              <ArrowRight className="h-5 w-5 text-gray-300 group-hover:text-primary" />
-            </button>
-          ))}
+      <div className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-xl max-w-md w-full border border-gray-100 dark:border-gray-700">
+        <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-6 text-center">Acesse sua conta</h2>
+        
+        <form onSubmit={handleLogin} className="space-y-4">
+          <div className="relative">
+            <Mail className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
+            <input 
+              required type="email" placeholder="Seu email" 
+              className="w-full pl-10 pr-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-primary outline-none dark:text-white"
+              value={form.email} onChange={e => setForm({...form, email: e.target.value})}
+            />
+          </div>
+
+          <div className="relative">
+            <Lock className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
+            <input 
+              required type="password" placeholder="Sua senha" 
+              className="w-full pl-10 pr-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-primary outline-none dark:text-white"
+              value={form.senha} onChange={e => setForm({...form, senha: e.target.value})}
+            />
+          </div>
+
+          <button 
+            type="submit" disabled={loading}
+            className="w-full bg-primary hover:bg-primary-dark text-white font-bold py-3 rounded-xl transition-all shadow-md active:scale-95 flex justify-center"
+          >
+            {loading ? <Loader2 className="animate-spin h-5 w-5" /> : "Entrar"}
+          </button>
+        </form>
+
+        <div className="mt-8 pt-6 border-t border-gray-100 dark:border-gray-700 text-center">
+          <p className="text-gray-500 text-sm mb-3">Novo por aqui?</p>
+          <Link to="/cadastro" className="text-primary font-bold hover:underline">
+            Criar Conta Grátis
+          </Link>
         </div>
       </div>
     </div>

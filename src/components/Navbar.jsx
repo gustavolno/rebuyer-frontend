@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Ticket, PlusCircle, LogIn, Moon, Sun, LogOut } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import { ShieldCheck } from 'lucide-react';
 
 const Navbar = () => {
   const { user, logout, theme, toggleTheme } = useAuth();
@@ -35,6 +36,13 @@ const Navbar = () => {
                   <PlusCircle className="h-5 w-5" />
                   <span className="hidden md:inline">Vender</span>
                 </Link>
+
+            {user && user.is_admin && (
+              <Link to="/admin-eventos" className="flex items-center gap-1 font-medium text-purple-600 dark:text-purple-400 hover:text-purple-800">
+                  <ShieldCheck className="h-5 w-5" />
+                  <span className="hidden md:inline">Criar Evento</span>
+              </Link>
+               )}
 
                 {/* Menu do Usuário */}
                 <div className="flex items-center gap-3 pl-4 border-l border-gray-200 dark:border-gray-700">

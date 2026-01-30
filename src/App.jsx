@@ -1,21 +1,52 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { AuthProvider } from './context/AuthContext';
 import Navbar from './components/Navbar';
 import HomePage from './pages/HomePage';
 import VenderPage from './pages/VenderPage';
 import LoginPage from './pages/LoginPage';
-import { AuthProvider } from './context/AuthContext'; // <--- Importante
+import CadastroPage from './pages/CadastroPage';
+import RotaProtegida from './components/RotaProtegida';
+import AdminEventosPage from './pages/AdminEventosPage';
 
 function App() {
   return (
-    <AuthProvider> {/* O site inteiro agora tem acesso ao usuário e tema */}
+    <AuthProvider>
       <Router>
         <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors">
+          {/* Navbar aparece em todas, mas ela se adapta se não tiver logado */}
           <Navbar />
+          
           <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/vender" element={<VenderPage />} />
-            <Route path="/login" element={<LoginPage />} />
+            {/* Rotas Públicas */}
+            <Route path="/" element={<LoginPage />} />
+            <Route path="/cadastro" element={<CadastroPage />} />
+
+            {/* Rotas Privadas (Só entra com Login) */}
+            <Route 
+              path="/vitrine" 
+              element={
+                <RotaProtegida>
+                  <HomePage />
+                </RotaProtegida>
+              } 
+            />
+
+            <Route 
+              path="/admin-eventos" element={
+                <RotaProtegida>
+                    <AdminEventosPage />
+                </RotaProtegida>
+            } />
+            
+            <Route 
+              path="/vender" 
+              element={
+                <RotaProtegida>
+                  <VenderPage />
+                </RotaProtegida>
+              } 
+            />
           </Routes>
         </div>
       </Router>

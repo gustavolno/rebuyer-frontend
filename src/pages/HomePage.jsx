@@ -4,7 +4,7 @@ import { MapPin, Calendar, Tag, Ticket, AlertCircle, X, User, CheckCircle2 } fro
 const HomePage = () => {
   const [ingressos, setIngressos] = useState([]);
   const [usuarios, setUsuarios] = useState([]);
-  const [eventos, setEventos] = useState([]); // <--- NOVO: Lista de Eventos
+  const [eventos, setEventos] = useState([]); 
   
   const [loading, setLoading] = useState(true);
   const [erro, setErro] = useState(null);
