@@ -8,6 +8,7 @@ import LoginPage from './pages/LoginPage';
 import CadastroPage from './pages/CadastroPage';
 import RotaProtegida from './components/RotaProtegida';
 import AdminEventosPage from './pages/AdminEventosPage';
+import MeusIngressosPage from './pages/MeusIngressosPage';
 
 function App() {
   return (
@@ -16,6 +17,13 @@ function App() {
         <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors">
           {/* Navbar aparece em todas, mas ela se adapta se não tiver logado */}
           <Navbar />
+
+          <Route 
+            path="/meus-ingressos" element={
+                <RotaProtegida>
+                    <MeusIngressosPage />
+                </RotaProtegida>
+            } />
           
           <Routes>
             {/* Rotas Públicas */}

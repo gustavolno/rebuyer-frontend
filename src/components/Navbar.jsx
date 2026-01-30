@@ -44,6 +44,13 @@ const Navbar = () => {
               </Link>
                )}
 
+            {user && (
+              <Link to="/meus-ingressos" className="flex items-center gap-1 font-medium text-gray-600 dark:text-gray-300 hover:text-primary transition-colors">
+                    <Ticket className="h-5 w-5" />
+                    <span className="hidden md:inline">Meus Ingressos</span>
+                </Link>
+              )}
+
                 {/* Menu do Usuário */}
                 <div className="flex items-center gap-3 pl-4 border-l border-gray-200 dark:border-gray-700">
                     <span className="text-sm font-bold text-gray-700 dark:text-gray-200">
